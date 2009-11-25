@@ -9,7 +9,7 @@ begin
     gem.description = "This is a ruby interface to Onlinenic.com's reseller API. You can find API v2.0 documentation here: https://www.onlinenic.com/cp_english/template_api/download/ONLINENIC_API2.0.pdf"
     gem.email       = "info@yh.com.tr"
     gem.homepage    = "http://github.com/yenihayat/onlinenic"
-    gem.authors     = ["İzzet Emre Kutlu"]
+    gem.authors     = ["Murat Demirten", "İzzet Emre Kutlu"]
     #gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
