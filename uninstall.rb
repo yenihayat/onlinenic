@@ -1,1 +1,3 @@
-# Uninstall hook code here
+#removes config file
+require "lib/onlinenic/plugin/requirements"
+Onlinenic::Config.remove

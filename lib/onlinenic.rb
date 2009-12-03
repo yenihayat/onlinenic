@@ -1,3 +1,1 @@
-class Onlinenic
-  
-end
+require "onlinenic/connection"

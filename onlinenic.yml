@@ -1,13 +1,13 @@
 development:
   server: "218.5.81.149"
   port: 30009
-  account: 135610
+  account: "135610"
   password: "654123"
 
 test:
   server: "218.5.81.149"
   port: 30009
-  account: 135610
+  account: "135610"
   password: "654123"
 
 production:

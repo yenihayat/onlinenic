@@ -1,1 +1,3 @@
-# Install hook code here
+#copies config file
+require "lib/onlinenic/plugin/requirements"
+Onlinenic::Config.copy
