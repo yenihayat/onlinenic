@@ -70,20 +70,20 @@ module Onlinenic
 
     #returns contactid
     def create_contact(params)
-      params = {
-              :domaintype => "0",
-              :name => "emre",
-              :org => "YeniHayat",
-              :country => "US",
-              :province => "FL",
-              :city => "FLV",
-              :street => "No 1 Street 1",
-              :postalcode => "abcde",
-              :voice => "+1.3950160530",
-              :fax => "+1.3950160530",
-              :email => "fist@onlinenic.com",
-              :password => "5846213"
-      }
+#      params = {
+#              :domaintype => "0",
+#              :name => "emre",
+#              :org => "YeniHayat",
+#              :country => "US",
+#              :province => "FL",
+#              :city => "FLV",
+#              :street => "No 1 Street 1",
+#              :postalcode => "abcde",
+#              :voice => "+1.3950160530",
+#              :fax => "+1.3950160530",
+#              :email => "fist@onlinenic.com",
+#              :password => "5846213"
+#      }
       begin
         @conn.write(Onlinenic::Request.create_contact(@config, params))
         set_response
