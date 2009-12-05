@@ -25,8 +25,11 @@ module Onlinenic
     ACTIONS = {
             :login  => { :name => "Login", :checksum => { :name => "login" } },
             :logout => { :name => "Logout", :checksum => { :name => "logout" } },
-            :create_contact => { :name => "CreateContact", :checksum => { :name => "crtcontact", :extra => [:name, :org, :email] } },
-            :check_contact => { :name => "CheckContact", :checksum => { :name => "checkcontact", :extra => [:domaintype, :contactid] } }
+            :create_contact => { :name => "CreateContact", :category => :domain, :checksum => { :name => "crtcontact", :extra => [:name, :org, :email] } },
+            :check_contact => { :name => "CheckContact", :category => :domain, :checksum => { :name => "checkcontact", :extra => [:domaintype, :contactid] } },
+            :update_contact => { :name => "UpdateContact", :category => :domain, :checksum => { :name => "updatecontact", :extra => [:domaintype, :domain, :contacttype] } },
+            :check_domain => { :name => "CheckDomain", :category => :domain, :checksum => { :name => "checkdomain", :extra => [:domaintype, :domain] } },
+            :info_domain => { :name => "InfoDomain", :category => :domain, :checksum => { :name => "infodomain", :extra => [:domaintype, :domain] } }
     }
 
     class << self
@@ -39,13 +42,27 @@ module Onlinenic
         create_request(config, CATEGORIES[:client], ACTIONS[:logout])
       end
 
-      def create_contact(config, params={})
-        create_request(config, CATEGORIES[:domain], ACTIONS[:create_contact], params)
+      ACTIONS.except(:login, :logout).each_pair do |k, v|
+        define_method(k) do |config, params|
+          create_request(config, CATEGORIES[v[:category]], ACTIONS[k], params)
+        end
       end
 
-      def check_contact(config, contactid, domaintype)
-        create_request(config, CATEGORIES[:domain], ACTIONS[:check_contact], :contactid => contactid, :domaintype => domaintype)
-      end
+#      def create_contact(config, params={})
+#        create_request(config, CATEGORIES[:domain], ACTIONS[:create_contact], params)
+#      end
+#
+#      def check_contact(config, params={})
+#        create_request(config, CATEGORIES[:domain], ACTIONS[:check_contact], params)
+#      end
+#
+#      def update_contact(config, params={})
+#        create_request(config, CATEGORIES[:domain], ACTIONS[:update_contact], params)
+#      end
+#
+#      def check_comain(config, params={})
+#        create_request(config, CATEGORIES[:domain], ACTIONS[:check_domain], params)
+#      end
 
       private
 

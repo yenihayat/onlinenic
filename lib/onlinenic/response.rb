@@ -47,6 +47,14 @@ module Onlinenic
       @response.xpath("//response//resData//data[@name='#{name}']/text()").to_s
     end
 
+    def errors
+      @response.errors
+    end
+
+    def response
+      @response
+    end
+
     private
 
     def get_node(name)

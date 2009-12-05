@@ -13,7 +13,7 @@ test:
 production:
   server: "www.onlinenic.com"
   port: 30009
-  account: 
+  account: ""
   password: ""
 
 
