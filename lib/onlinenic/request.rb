@@ -23,13 +23,27 @@ module Onlinenic
     }
 
     ACTIONS = {
-            :login  => { :name => "Login", :checksum => { :name => "login" } },
-            :logout => { :name => "Logout", :checksum => { :name => "logout" } },
-            :create_contact => { :name => "CreateContact", :category => :domain, :checksum => { :name => "crtcontact", :extra => [:name, :org, :email] } },
-            :check_contact => { :name => "CheckContact", :category => :domain, :checksum => { :name => "checkcontact", :extra => [:domaintype, :contactid] } },
-            :update_contact => { :name => "UpdateContact", :category => :domain, :checksum => { :name => "updatecontact", :extra => [:domaintype, :domain, :contacttype] } },
-            :check_domain => { :name => "CheckDomain", :category => :domain, :checksum => { :name => "checkdomain", :extra => [:domaintype, :domain] } },
-            :info_domain => { :name => "InfoDomain", :category => :domain, :checksum => { :name => "infodomain", :extra => [:domaintype, :domain] } }
+            :login                => { :name => "Login", :checksum => { :name => "login" } },
+            :logout               => { :name => "Logout", :checksum => { :name => "logout" } },
+            :create_contact       => { :name => "CreateContact", :category => :domain, :checksum => { :name => "crtcontact", :extra => [:name, :org, :email] } },
+            :check_contact        => { :name => "CheckContact", :category => :domain, :checksum => { :name => "checkcontact", :extra => [:domaintype, :contactid] } },
+            :update_contact       => { :name => "UpdateContact", :category => :domain, :checksum => { :name => "updatecontact", :extra => [:domaintype, :domain, :contacttype] } },
+            :check_domain         => { :name => "CheckDomain", :category => :domain, :checksum => { :name => "checkdomain", :extra => [:domaintype, :domain] } },
+            :info_domain          => { :name => "InfoDomain", :category => :domain, :checksum => { :name => "infodomain", :extra => [:domaintype, :domain] } },
+            :create_domain        => { :name => "CreateDomain", :category => :domain, :checksum => { :name => "createdomain", :extra => [:domaintype, :domain, :period, :dns, :registrant, :admin, :tech, :billing, :password] } },
+            :renew_domain         => { :name => "RenewDomain", :category => :domain, :checksum => { :name => "renewdomain", :extra => [:domaintype, :domain, :period] } },
+            :delete_domain        => { :name => "DeleteDomain", :category => :domain, :checksum => { :name => "deldomain", :extra => [:domaintype, :domain] } },
+            :update_domain_status => { :name => "UpdateDomainStatus", :category => :domain, :checksum => { :name => "updatedomainstatus", :extra => [:domaintype, :domain] } },
+            :update_domain_extra  => { :name => "UpdateDomainExtra", :category => :domain, :checksum => { :name => "updatedomainextra", :extra => [:domaintype, :domain] } },
+            :update_domain_dns    => { :name => "UpdateDomainDns", :category => :domain, :checksum => { :name => "updatedomaindns", :extra => [:domaintype, :domain] } },
+            :update_domain_pwd    => { :name => "UpdateDomainPwd", :category => :domain, :checksum => { :name => "updatedomainpwd", :extra => [:domaintype, :domain, :password] } },
+            :info_domain_extra    => { :name => "InfoDomainExtra", :category => :domain, :checksum => { :name => "infodomainextra", :extra => [:domaintype, :domain] } },
+            :get_auth_code        => { :name => "GetAuthcode", :category => :domain, :checksum => { :name => "getauthcode", :extra => [:domaintype, :domain] } },
+            :check_host           => { :name => "CheckHost", :category => :domain, :checksum => { :name => "checkhost", :extra => [:domaintype, :hostname] } },
+            :info_host            => { :name => "InfoHost", :category => :domain, :checksum => { :name => "infohost", :extra => [:domaintype, :hostname] } },
+            :create_host          => { :name => "CreateHost", :category => :domain, :checksum => { :name => "createhost", :extra => [:domaintype, :hostname, :addr] } },
+            :update_host          => { :name => "UpdateHost", :category => :domain, :checksum => { :name => "updatehost", :extra => [:domaintype, :hostname, :addaddr, :remaddr] } },
+            :delete_host          => { :name => "DeleteHost", :category => :domain, :checksum => { :name => "deletehost", :extra => [:domaintype, :hostname, :addaddr, :remaddr] } }            
     }
 
     class << self
@@ -48,22 +62,6 @@ module Onlinenic
         end
       end
 
-#      def create_contact(config, params={})
-#        create_request(config, CATEGORIES[:domain], ACTIONS[:create_contact], params)
-#      end
-#
-#      def check_contact(config, params={})
-#        create_request(config, CATEGORIES[:domain], ACTIONS[:check_contact], params)
-#      end
-#
-#      def update_contact(config, params={})
-#        create_request(config, CATEGORIES[:domain], ACTIONS[:update_contact], params)
-#      end
-#
-#      def check_comain(config, params={})
-#        create_request(config, CATEGORIES[:domain], ACTIONS[:check_domain], params)
-#      end
-
       private
 
       def create_request(config, category, action, params={})
@@ -75,13 +73,19 @@ module Onlinenic
         if params
           xml << "<params>"
           params.each_pair do |k, v|
-            xml << "<param name=\"#{k}\">#{v}</param>"
+            if v.kind_of?(Array)
+              v.each do |e|
+                xml << "<param name=\"#{k}\">#{e}</param>"
+              end
+            else
+              xml << "<param name=\"#{k}\">#{v}</param>"
+            end
           end
           xml << "</params>"
         end
         xml << "<cltrid>#{cltrid}</cltrid>"
         xml << "<chksum>#{checksum(config, cltrid, action[:checksum], params)}</chksum>"
-        xml << "</request>"        
+        xml << "</request>"
       end
 
       def create_cltrid
@@ -91,7 +95,7 @@ module Onlinenic
       def checksum(config, cltrid, action, params)
         suffix = action[:name].dup
         action[:extra].try(:each) do |e|
-          suffix << params[e]
+          suffix << params[e].to_s
         end
         Digest::MD5.hexdigest(config["account"].to_s + Digest::MD5.hexdigest(config["password"]) + cltrid + suffix)
       end

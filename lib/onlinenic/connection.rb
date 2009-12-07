@@ -7,11 +7,26 @@ module Onlinenic
     TCP_INFO        = 11
 
     COMMANDS = {
-            :check_contact  => "avail",
-            :create_contact => "contactid",
-            :update_contact => "contactid",
-            :check_domain   => "avail",
-            :info_domain    => nil
+            :check_contact        => "avail",
+            :create_contact       => "contactid",
+            :update_contact       => "contactid",
+            :check_domain         => "avail",
+            :info_domain          => nil,
+            :create_domain        => nil,
+            :renew_domain         => nil,
+            :delete_domain        => nil,
+            :update_domain_status => nil,
+            :update_domain_extra  => nil,
+            :update_domain_dns    => nil,
+            :update_domain_pwd    => nil,
+            :info_domain_extra    => nil,
+            :get_auth_code        => "password",
+            :check_host           => "avail",
+            :info_host            => nil,
+            :create_host          => nil,
+            :update_host          => nil,
+            :delete_host          => nil,
+            :info_id_shield       => nil
     }
 
     attr_reader :response

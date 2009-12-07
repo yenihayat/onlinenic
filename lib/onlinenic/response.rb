@@ -29,13 +29,15 @@ module Onlinenic
             :success => 1000..1999
     }
 
+    attr_reader :response
+
     def initialize(conn)
       @response = Nokogiri::XML(conn.waitfor(/<\/response>/))
     end
 
     #defines methods to get xml nodes. Ex: Onlinenic::Connection.new.category #=> "client"
     NODES.each do |n|
-      define_method(n) { get_node(n) }
+      define_method(n) { @response.xpath("//response//#{n}/text()").to_s }
     end
 
     #checks the "code" node if it is between 1000 and 1999. returns boolean.
@@ -45,20 +47,6 @@ module Onlinenic
 
     def get_data(name)
       @response.xpath("//response//resData//data[@name='#{name}']/text()").to_s
-    end
-
-    def errors
-      @response.errors
-    end
-
-    def response
-      @response
-    end
-
-    private
-
-    def get_node(name)
-      @response.xpath("//response//#{name}/text()").to_s
     end
 
   end
