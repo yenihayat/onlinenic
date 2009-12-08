@@ -1,3 +1,3 @@
 #removes config file
-require "lib/onlinenic/plugin/requirements"
+require File.dirname(__FILE__) + "/lib/onlinenic/plugin/requirements"
 Onlinenic::Config.remove
