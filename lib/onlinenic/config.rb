@@ -5,7 +5,7 @@ module Onlinenic
     
     filename  = "onlinenic.yml"
     @dest     = File.expand_path("#{File.dirname(__FILE__)}/../../../../../config/#{filename}")
-    @src      = filename
+    @src      = File.expand_path("#{File.dirname(__FILE__)}/../../#{filename}")
 
     #gets configuration options from config file
     def self.get(env = RAILS_ENV)
@@ -17,7 +17,7 @@ module Onlinenic
       if exists?
         p "Config file already initialized."
       else
-        p "Initializing config file."
+        p "Initializing config file. Check config/onlinenic.yml"
         FileUtils.cp(@src, @dest)
       end
     end
