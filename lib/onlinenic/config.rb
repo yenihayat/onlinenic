@@ -17,7 +17,7 @@ module Onlinenic
       if exists?
         p "Config file already initialized."
       else
-        p "Initializing config file. Check RAILS_ROOT/config/onlinenic.yml"
+        p "Initializing config file. Check RAILS_ROOT/nfig/onlinenic.yml"
         FileUtils.cp(@src, @dest)
       end
     end
