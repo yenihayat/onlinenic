@@ -11,7 +11,7 @@ module Onlinenic
     def check_domain(domain)
       domain = Onlinenic::Domain.new(domain)
       @response = @wrapper.check_domain({ :domain => domain.full_name, :domaintype => domain.type })
-      close if @opts[:auto_logout]
+      logout if @opts[:auto_logout]
       @response.get_data("avail").eql?("1") ? true : false
     end
 
