@@ -8,29 +8,6 @@ module Onlinenic
       TCP_CLOSE_WAIT  = 8
       TCP_INFO        = 11
 
-#    COMMANDS = {
-#            :check_contact        => "avail",
-#            :create_contact       => "contactid",
-#            :update_contact       => "contactid",
-#            :check_domain         => "avail",
-#            :info_domain          => nil,
-#            :create_domain        => nil,
-#            :renew_domain         => nil,
-#            :delete_domain        => nil,
-#            :update_domain_status => nil,
-#            :update_domain_extra  => nil,
-#            :update_domain_dns    => nil,
-#            :update_domain_pwd    => nil,
-#            :info_domain_extra    => nil,
-#            :get_auth_code        => "password",
-#            :check_host           => "avail",
-#            :info_host            => nil,
-#            :create_host          => nil,
-#            :update_host          => nil,
-#            :delete_host          => nil,
-#            :info_id_shield       => nil
-#    }
-
       COMMANDS = [:check_contact, :create_contact, :update_contact, :check_domain, :info_domain, :create_domain, :renew_domain, :delete_domain, :update_domain_status, :update_domain_extra, :update_domain_dns, :update_domain_pwd, :info_domain_extra, :get_auth_code, :check_host, :info_host, :create_host, :update_host, :delete_host, :info_id_shield]
 
       attr_reader :response
@@ -55,14 +32,12 @@ module Onlinenic
         end
       end
 
-      #COMMANDS.each_pair do |method, result|
       COMMANDS.each do |method|
         define_method(method) do |params|
           begin
             check_connection
             @conn.write(Onlinenic::Wrapper::Request.send(method, @config, params))
             set_response
-            #result ? @response.get_data(result) : @response
           rescue TimeoutError => e #TODO
             p e.message
           end
