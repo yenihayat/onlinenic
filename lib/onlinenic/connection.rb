@@ -5,14 +5,14 @@ module Onlinenic
 
     def initialize(opts={})
       @opts = { :auto_logout => true }.merge(opts)
-      @wrapper = Onlinenic::Wrapper.new
+      @wrapper = Onlinenic::Wrapper::Base.new
     end
 
     def check_domain(domain)
       domain = Onlinenic::Domain.new(domain)
       @response = @wrapper.check_domain({ :domain => domain.full_name, :domaintype => domain.type })
       logout if @opts[:auto_logout]
-      @response.get_data("avail").eql?("1") ? true : false
+      @response.success? ? @response.get_data("avail") : @response.msg
     end
 
     def logout
