@@ -18,6 +18,5 @@ module Onlinenic
     def logout
       @wrapper.logout
     end
-
   end
 end
