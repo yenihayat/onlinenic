@@ -5,8 +5,11 @@ module Onlinenic
             :com  => 0,
             :net  => 0,
             :biz  => 800,
+            :name	=> 804,
             :info => 805,
-            :org  => 807
+            :us		=> 806,
+            :org  => 807,
+            :me		=> 906
     }
 
     attr_reader :full_name, :name, :extension, :type

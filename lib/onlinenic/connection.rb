@@ -5,8 +5,6 @@ module Onlinenic
 #            :check_contact        => "avail",
 #            :create_contact       => "contactid",
 #            :update_contact       => "contactid",
-#            :check_domain         => "avail",
-#            :info_domain          => nil,
 #            :create_domain        => nil,
 #            :renew_domain         => nil,
 #            :delete_domain        => nil,
@@ -28,7 +26,7 @@ module Onlinenic
 
     def initialize(opts={})
       @opts = { :auto_logout => true }.merge(opts)
-      @wrapper = Onlinenic::Wrapper::Base.new
+      @wrapper = Onlinenic::Wrapper::Base.new(Onlinenic::Config.get)
     end
 
     #if command is successful returns true or false
@@ -48,10 +46,20 @@ module Onlinenic
       logout if @opts[:auto_logout]
       @response.success? ? @response : nil
     end
+    
+    def create_domain(params={})
+    	domain = Onlinenic::Domain.new(params[:domain])
+    	
+    end
 
-
+		#logouts and closes the TCP connection
     def logout
       @wrapper.logout
+    end
+    
+    #returns the "msg" value of response xml
+    def message
+    	@response.try(:msg)
     end
 
   end

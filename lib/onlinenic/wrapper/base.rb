@@ -12,14 +12,14 @@ module Onlinenic
 
       attr_reader :response
 
-      def initialize
-        connect
+      def initialize(config = @config)
+        connect(config)
         login
       end
 
       #sets @conn(Net::Telnet) attribute
-      def connect
-        @config = Onlinenic::Config.get
+      def connect(config)
+        @config = config
         begin
           @conn = Net::Telnet::new(
                   "Host"        => @config["server"],
