@@ -1,10 +1,14 @@
 module Onlinenic
   class Connection
 
+    PHONE_CODES = {
+            "US" => "1",
+            "TR" => "90"
+    }
+
 #    COMMANDS = {
 #            :check_contact        => "avail",
 #            :update_contact       => "contactid",
-#            :create_domain        => nil,
 #            :renew_domain         => nil,
 #            :delete_domain        => nil,
 #            :update_domain_status => nil,
@@ -22,6 +26,7 @@ module Onlinenic
     attr_reader :response
 
     def initialize(opts={})
+      opts.symbolize_keys!
       @opts = { :auto_logout => true }.merge(opts)
       @wrapper = Onlinenic::Wrapper::Base.new(Onlinenic::Config.get)
     end
@@ -60,6 +65,7 @@ module Onlinenic
     #if command is successful returns Onlinenic::Wrapper::Response
     #else returns nil
     def create_domain(params={})
+      params.symbolize_keys!
       domain = Onlinenic::Domain.new(params[:domain])
       @response = @wrapper.create_domain({
               :domaintype => domain.type,
@@ -83,6 +89,8 @@ module Onlinenic
     #if command is successful returns "contactid"
     #else returns nil
     def create_contact(params={})
+      params.symbolize_keys!
+      phone_code = PHONE_CODES[params[:country]]
       @response = @wrapper.create_contact({
               :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
               :name         => params[:name],
@@ -92,8 +100,8 @@ module Onlinenic
               :city         => params[:city],
               :street       => params[:street],
               :postalcode   => params[:postalcode],
-              :voice        => params[:voice], #TODO formatı incele
-              :fax          => params[:fax], #TODO formatı incele
+              :voice        => "+" + phone_code + "." + params[:voice], #params[:voice] must be minimum 5 digit
+              :fax          => "+" + phone_code + "." + params[:fax], #params[:fax] must be minimum 5 digit
               :email        => params[:email],
               :password     => params[:password]
       })
@@ -107,6 +115,7 @@ module Onlinenic
     #if command is successful returns true or false
     #else returns nil
     def check_host(hostname)
+      params.symbolize_keys!
       domain = Onlinenic::Domain.new(hostname)
       @response = @wrapper.check_host({ :domaintype => domain.type, :hostname => hostname })
       logout if @opts[:auto_logout]
@@ -120,7 +129,7 @@ module Onlinenic
       @response = @wrapper.info_host({ :domaintype => domain.type, :hostname => hostname })
       logout if @opts[:auto_logout]
       @response.try(:success?) ? @response : nil
-    end  
+    end
 
   end
 end
