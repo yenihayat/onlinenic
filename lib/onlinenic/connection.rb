@@ -6,9 +6,9 @@ module Onlinenic
             "TR" => "90"
     }
 
+# commands to implement
 #    COMMANDS = {
 #            :check_contact        => "avail",
-#            :update_contact       => "contactid",
 #            :renew_domain         => nil,
 #            :delete_domain        => nil,
 #            :update_domain_status => nil,
@@ -100,8 +100,33 @@ module Onlinenic
               :city         => params[:city],
               :street       => params[:street],
               :postalcode   => params[:postalcode],
-              :voice        => "+" + phone_code + "." + params[:voice], #params[:voice] must be minimum 5 digit
-              :fax          => "+" + phone_code + "." + params[:fax], #params[:fax] must be minimum 5 digit
+              :voice        => "+" + phone_code + "." + params[:voice], #params[:voice] must be :in => 5..12
+              :fax          => "+" + phone_code + "." + params[:fax], #params[:fax] must be :in => 5..12
+              :email        => params[:email],
+              :password     => params[:password]
+      })
+      logout if @opts[:auto_logout]
+      @response.try(:success?) ? @response.get_data("contactid") : nil
+    end
+
+    #if command is successful returns "contactid"
+    #else returns nil
+    def update_contact(params={})
+      params.symbolize_keys!
+      phone_code = PHONE_CODES[params[:country]]
+      @response = @wrapper.create_contact({
+              :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
+              :domain       => params[:domain],
+              :contacttype  => params[:contacttype],
+              :name         => params[:name],
+              :org          => params[:org],
+              :country      => params[:country],
+              :province     => params[:province],
+              :city         => params[:city],
+              :street       => params[:street],
+              :postalcode   => params[:postalcode],
+              :voice        => "+" + phone_code + "." + params[:voice], #params[:voice] must be :in => 5..12
+              :fax          => "+" + phone_code + "." + params[:fax], #params[:fax] must be :in => 5..12
               :email        => params[:email],
               :password     => params[:password]
       })
