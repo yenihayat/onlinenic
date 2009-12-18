@@ -109,12 +109,12 @@ module Onlinenic
       @response.try(:success?) ? @response.get_data("contactid") : nil
     end
 
-    #if command is successful returns "contactid"
+    #if command is successful returns Onlinenic::Wrapper::Response
     #else returns nil
     def update_contact(params={})
       params.symbolize_keys!
       phone_code = PHONE_CODES[params[:country]]
-      @response = @wrapper.create_contact({
+      @response = @wrapper.update_contact({
               :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
               :domain       => params[:domain],
               :contacttype  => params[:contacttype],
@@ -131,7 +131,7 @@ module Onlinenic
               :password     => params[:password]
       })
       logout if @opts[:auto_logout]
-      @response.try(:success?) ? @response.get_data("contactid") : nil
+      @response.try(:success?) ? @response : nil
     end
 
     #-------------------------------------------------------------------------------
