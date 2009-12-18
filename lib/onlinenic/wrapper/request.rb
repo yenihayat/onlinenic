@@ -29,6 +29,7 @@ module Onlinenic
               :create_contact       => { :name => "CreateContact", :category => :domain, :checksum => { :name => "crtcontact", :extra => [:name, :org, :email] } },
               :check_contact        => { :name => "CheckContact", :category => :domain, :checksum => { :name => "checkcontact", :extra => [:domaintype, :contactid] } },
               :update_contact       => { :name => "UpdateContact", :category => :domain, :checksum => { :name => "updatecontact", :extra => [:domaintype, :domain, :contacttype] } },
+              :change_registrant    => { :name => "ChangeRegistrant", :category => :domain, :checksum => { :name => "chgregistrant", :extra => [:domaintype, :domain, :name, :org, :email] } },
               :check_domain         => { :name => "CheckDomain", :category => :domain, :checksum => { :name => "checkdomain", :extra => [:domaintype, :domain] } },
               :info_domain          => { :name => "InfoDomain", :category => :domain, :checksum => { :name => "infodomain", :extra => [:domaintype, :domain] } },
               :create_domain        => { :name => "CreateDomain", :category => :domain, :checksum => { :name => "createdomain", :extra => [:domaintype, :domain, :period, :dns, :registrant, :admin, :tech, :billing, :password] } },

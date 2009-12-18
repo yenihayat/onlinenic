@@ -8,7 +8,7 @@ module Onlinenic
       TCP_CLOSE_WAIT  = 8
       TCP_INFO        = 11
 
-      COMMANDS = [:check_contact, :create_contact, :update_contact, :check_domain, :info_domain, :create_domain, :renew_domain, :delete_domain, :update_domain_status, :update_domain_extra, :update_domain_dns, :update_domain_pwd, :info_domain_extra, :get_auth_code, :check_host, :info_host, :create_host, :update_host, :delete_host, :info_id_shield]
+      COMMANDS = [:check_contact, :create_contact, :update_contact, :check_domain, :info_domain, :create_domain, :renew_domain, :delete_domain, :update_domain_status, :update_domain_extra, :update_domain_dns, :update_domain_pwd, :info_domain_extra, :get_auth_code, :check_host, :info_host, :create_host, :update_host, :delete_host, :info_id_shield, :change_registrant]
 
       attr_reader :response
 

@@ -134,6 +134,21 @@ module Onlinenic
       @response.try(:success?) ? @response : nil
     end
 
+    #if command is successful returns Onlinenic::Wrapper::Response
+    #else returns nil
+    def change_registrant(params={})
+      params.symbolize_keys!
+      @response = @wrapper.change_registrant({
+              :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
+              :domain       => params[:domain],
+              :name         => params[:name],
+              :org          => params[:org],
+              :email        => params[:email]
+      })
+      logout if @opts[:auto_logout]
+      @response.try(:success?) ? @response : nil
+    end
+
     #-------------------------------------------------------------------------------
     #HOST
 
