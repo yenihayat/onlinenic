@@ -88,7 +88,7 @@ module Onlinenic
       domain = Onlinenic::Domain.new(domain)
       @response = @wrapper.renew_domain({ :domain => domain.full_name, :domaintype => domain.type, :period => period })
       logout if @opts[:auto_logout]
-      @response.try(:success?) ? @response : nil
+      @response.try(:success?) ? @response.get_data("exDate") : nil
     end
 
     #-------------------------------------------------------------------------------
