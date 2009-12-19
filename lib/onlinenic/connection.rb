@@ -9,7 +9,6 @@ module Onlinenic
 # commands to implement
 #    COMMANDS = {
 #            :check_contact        => "avail",
-#            :renew_domain         => nil,
 #            :delete_domain        => nil,
 #            :update_domain_status => nil,
 #            :update_domain_extra  => nil,
@@ -83,6 +82,15 @@ module Onlinenic
       @response.try(:success?) ? @response : nil
     end
 
+    #if command is successful returns Onlinenic::Wrapper::Response
+    #else returns nil
+    def renew_domain(domain, period)
+      domain = Onlinenic::Domain.new(domain)
+      @response = @wrapper.renew_domain({ :domain => domain.full_name, :domaintype => domain.type, :period => period })
+      logout if @opts[:auto_logout]
+      @response.try(:success?) ? @response : nil
+    end
+
     #-------------------------------------------------------------------------------
     #CONTACT
 
@@ -117,7 +125,7 @@ module Onlinenic
       args = {
               :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
               :domain       => params[:domain],
-              :contacttype  => params[:contacttype],
+              :contacttype  => params[:contacttpe],
               :name         => params[:name],
               :org          => params[:org],
               :country      => params[:country],
