@@ -109,12 +109,12 @@ module Onlinenic
       @response.try(:success?) ? @response.get_data("contactid") : nil
     end
 
-    #if command is successful returns Onlinenic::Wrapper::Response
-    #else returns nil
+    #if command is successful returns Onlinenic::Wrapper::Response else returns nil
+    #"country" is requiered to update "voice" or "fax".
     def update_contact(params={})
       params.symbolize_keys!
       phone_code = PHONE_CODES[params[:country]]
-      @response = @wrapper.update_contact({
+      args = {
               :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
               :domain       => params[:domain],
               :contacttype  => params[:contacttype],
@@ -125,11 +125,12 @@ module Onlinenic
               :city         => params[:city],
               :street       => params[:street],
               :postalcode   => params[:postalcode],
-              :voice        => "+" + phone_code + "." + params[:voice], #params[:voice] must be :in => 5..12
-              :fax          => "+" + phone_code + "." + params[:fax], #params[:fax] must be :in => 5..12
               :email        => params[:email],
               :password     => params[:password]
-      })
+      }
+      args.merge!({ :voice => "+" + phone_code + "." + params[:voice] }) if params[:voice] and phone_code
+      args.merge!({ :fax => "+" + phone_code + "." + params[:fax] }) if params[:fax] and phone_code
+      @response = @wrapper.update_contact(args)
       logout if @opts[:auto_logout]
       @response.try(:success?) ? @response : nil
     end
