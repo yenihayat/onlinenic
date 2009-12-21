@@ -12,7 +12,6 @@ module Onlinenic
 #            :delete_domain        => nil,
 #            :update_domain_status => nil,
 #            :update_domain_extra  => nil,
-#            :update_domain_dns    => nil,
 #            :update_domain_pwd    => nil,
 #            :info_domain_extra    => nil,
 #            :get_auth_code        => "password",
@@ -43,8 +42,9 @@ module Onlinenic
     #-------------------------------------------------------------------------------
     #DOMAIN
 
-    #if command is successful returns true or false
-    #else returns nil
+    #Checks the domain if it is available to purchase
+    #if it is available returns true if not returns false
+    #if there is an error returns nil
     def check_domain(domain)
       domain = Onlinenic::Domain.new(domain)
       @response = @wrapper.check_domain({ :domain => domain.full_name, :domaintype => domain.type })
@@ -89,6 +89,21 @@ module Onlinenic
       @response = @wrapper.renew_domain({ :domain => domain.full_name, :domaintype => domain.type, :period => period })
       logout if @opts[:auto_logout]
       @response.try(:success?) ? @response.get_data("exDate") : nil
+    end
+
+    #Updates the domain's nameservers. Minimum 2, maximum 6 nameservers.
+    #if command is successful returns Onlinenic::Wrapper::Response
+    #else returns nil
+    def update_domain_dns(params={})
+      params.symbolize_keys!
+      domain = Onlinenic::Domain.new(params[:domain])
+      @response = @wrapper.update_domain_dns({
+              :domaintype => domain.type,
+              :domain     => domain.full_name,
+              :nameserver => params[:nameserver]
+      })
+      logout if @opts[:auto_logout]
+      @response.try(:success?) ? @response : nil
     end
 
     #-------------------------------------------------------------------------------
