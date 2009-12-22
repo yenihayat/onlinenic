@@ -140,7 +140,7 @@ module Onlinenic
       args = {
               :domaintype   => Onlinenic::Domain.new(params[:domain]).type,
               :domain       => params[:domain],
-              :contacttype  => params[:contacttpe],
+              :contacttype  => params[:contacttype],
               :name         => params[:name],
               :org          => params[:org],
               :country      => params[:country],
