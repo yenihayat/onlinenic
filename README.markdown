@@ -1,8 +1,6 @@
 Onlinenic.com Reseller API
 ===========================
 
-UNDER HEAVY DEVELOPMENT
-
 Overview
 --------
 
