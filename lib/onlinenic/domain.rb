@@ -7,7 +7,7 @@ module Onlinenic
             :biz  => 800,
             :name => 804,
             :info => 805,
-#           :us	  => 806,
+            :us	  => 806,
             :org  => 807,
             :me	  => 906
     }

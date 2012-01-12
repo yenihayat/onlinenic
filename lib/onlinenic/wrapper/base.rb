@@ -26,6 +26,7 @@ module Onlinenic
                   "Port"        => @config["port"],
                   "Telnetmode"  => false
           )
+					@sock = @conn.sock # Ruby 1.9.3
           set_response
         rescue TimeoutError => e #TODO
           p e.message
@@ -90,15 +91,18 @@ module Onlinenic
 
       #is connection at ESTABLISHED state?
       def established?
-        @conn.getsockopt(Socket::SOL_TCP, TCP_INFO).unpack("i").to_s.eql?(TCP_ESTABLISHED.to_s)
-      rescue
+				# Ruby 1.8.7
+        #@conn.getsockopt(Socket::SOL_TCP, TCP_INFO).unpack("i").to_s.eql?(TCP_ESTABLISHED.to_s)
+				# Ruby 1.9.3
+        @sock.getsockopt(Socket::SOL_TCP, TCP_INFO).unpack("i")[0].to_s.eql?(TCP_ESTABLISHED.to_s)
+      rescue Exception => e
         false
       end
 
       #is connection at CLOSE_WAIT state?
       def close_wait?
-        @conn.getsockopt(Socket::SOL_TCP, TCP_INFO).unpack("i").to_s.eql?(TCP_CLOSE_WAIT.to_s)
-      rescue
+        @sock.getsockopt(Socket::SOL_TCP, TCP_INFO).unpack("i")[0].to_s.eql?(TCP_CLOSE_WAIT.to_s)
+      rescue Exception => e
         false
       end
 

@@ -3,13 +3,18 @@ module Onlinenic
   module Config
     require "fileutils"
     
-    filename  = "onlinenic.yml"
-    @dest     = File.expand_path("#{File.dirname(__FILE__)}/../../../../../config/#{filename}")
-    @src      = File.expand_path("#{File.dirname(__FILE__)}/../../#{filename}")
+    FILENAME  = "onlinenic.yml"
+    #@dest     = File.expand_path("#{File.dirname(__FILE__)}/../../../../../config/#{filename}")
+		#@dest     = File.join(Rails.root, "config", "onlinenic.yml")
+    @src      = File.expand_path("#{File.dirname(__FILE__)}/../../#{FILENAME}")
+
+		def self.dest
+			@dest ||= File.join(Rails.root, "config", "onlinenic.yml")
+		end
 
     #gets configuration options from config file
-    def self.get(env = RAILS_ENV)
-      YAML::load(IO.read(@dest))[env]
+    def self.get(env = Rails.env)
+      YAML::load(IO.read(self.dest))[env]
     end
 
     #copies config file unless it exists
@@ -17,8 +22,8 @@ module Onlinenic
       if exists?
         p "Config file already initialized."
       else
-        p "Initializing config file. Check RAILS_ROOT/config/onlinenic.yml"
-        FileUtils.cp(@src, @dest)
+        p "Initializing config file. Check Rails.root/config/onlinenic.yml"
+        FileUtils.cp(@src, self.dest)
       end
     end
 
@@ -26,7 +31,7 @@ module Onlinenic
     def self.remove
       if exists?
         p "Removing config file."
-        FileUtils.rm(@dest)
+        FileUtils.rm(self.dest)
       else
         p "Config file already removed."
       end
@@ -36,7 +41,7 @@ module Onlinenic
 
     #checks if config file exists
     def self.exists?
-      File.exists?(@dest)
+      File.exists?(self.dest)
     end
 
   end
